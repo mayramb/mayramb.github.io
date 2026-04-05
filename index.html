@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en" data-lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -17,9 +17,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--black);
       color: var(--white);
@@ -27,7 +25,6 @@
       overflow-x: hidden;
     }
 
-    /* ── NOISE OVERLAY ── */
     body::before {
       content: '';
       position: fixed;
@@ -62,6 +59,12 @@
       background-clip: text;
     }
 
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
     nav ul {
       list-style: none;
       display: flex;
@@ -79,6 +82,37 @@
     }
 
     nav ul a:hover { color: var(--fuchsia); }
+
+    /* ── LANG TOGGLE ── */
+    .lang-toggle {
+      display: flex;
+      gap: 0;
+      border: 1px solid rgba(230,0,126,0.4);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .lang-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      padding: 0.35rem 0.7rem;
+      background: transparent;
+      color: rgba(255,255,255,0.4);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+
+    .lang-btn.active {
+      background: var(--fuchsia);
+      color: var(--white);
+    }
+
+    .lang-btn:hover:not(.active) {
+      color: var(--fuchsia);
+    }
 
     /* ── HERO ── */
     #hero {
@@ -224,7 +258,7 @@
       50% { transform: translateY(-16px); }
     }
 
-    /* ── STACK TICKER ── */
+    /* ── TICKER ── */
     .ticker-wrap {
       overflow: hidden;
       border-top: 1px solid rgba(255,255,255,0.08);
@@ -460,8 +494,6 @@
     }
 
     /* ── STACK ── */
-    #stack { }
-
     .stack-categories {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -484,11 +516,7 @@
       margin-bottom: 1rem;
     }
 
-    .stack-items {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
+    .stack-items { display: flex; flex-direction: column; gap: 0.5rem; }
 
     .stack-item {
       font-size: 0.85rem;
@@ -517,7 +545,7 @@
 
     #contact p {
       color: rgba(255,255,255,0.5);
-      max-width: 500px;
+      max-width: 520px;
       margin: 0 auto 2.5rem;
       line-height: 1.7;
     }
@@ -527,6 +555,58 @@
       justify-content: center;
       gap: 1.5rem;
       flex-wrap: wrap;
+    }
+
+    /* ── EMAIL DROPDOWN ── */
+    .email-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .email-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      left: 0;
+      background: #1a1a1a;
+      border: 1px solid rgba(230,0,126,0.3);
+      border-radius: 2px;
+      min-width: 220px;
+      z-index: 200;
+      overflow: hidden;
+    }
+
+    .email-wrapper:hover .email-dropdown,
+    .email-wrapper:focus-within .email-dropdown {
+      display: block;
+    }
+
+    .email-option {
+      display: block;
+      padding: 0.75rem 1rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      transition: all 0.2s;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .email-option:last-child { border-bottom: none; }
+
+    .email-option:hover {
+      background: rgba(230,0,126,0.1);
+      color: var(--fuchsia);
+    }
+
+    .email-label {
+      display: block;
+      font-size: 0.55rem;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 0.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
     }
 
     /* ── FOOTER ── */
@@ -574,12 +654,18 @@
   <!-- NAV -->
   <nav>
     <div class="nav-logo">Mayra Bastidas</div>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#stack">Stack</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+    <div class="nav-right">
+      <ul>
+        <li><a href="#about" data-en="About" data-es="Sobre mí">About</a></li>
+        <li><a href="#projects" data-en="Projects" data-es="Proyectos">Projects</a></li>
+        <li><a href="#stack" data-en="Stack" data-es="Stack">Stack</a></li>
+        <li><a href="#contact" data-en="Contact" data-es="Contacto">Contact</a></li>
+      </ul>
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('es')">ES</button>
+      </div>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -588,20 +674,18 @@
     <div class="hero-bg-circle"></div>
 
     <div class="hero-text fade-up">
-      <div class="hero-tag">Data Strategy · Digital Transformation · Madrid</div>
+      <div class="hero-tag" data-en="Data Strategy · Digital Transformation · Madrid" data-es="Estrategia de Datos · Transformación Digital · Madrid">Data Strategy · Digital Transformation · Madrid</div>
       <h1>
-        Turning<br/>
-        <span class="grad">Data</span><br/>
-        Into Growth
+        <span data-en="Turning" data-es="Datos">Turning</span><br/>
+        <span class="grad" data-en="Data" data-es="en">Data</span><br/>
+        <span data-en="Into Growth" data-es="Resultados">Into Growth</span>
       </h1>
-      <p class="hero-sub">
-        Senior consultant with 10+ years building data ecosystems,
-        CRM transformations, and analytics solutions across pharma,
-        aviation, and tech — from Bogotá to Madrid.
+      <p class="hero-sub" data-en="Senior consultant with 10+ years building data ecosystems, CRM transformations, and analytics solutions across a diverse range of businesses — from global multinationals to local SMEs across Latin America and Europe." data-es="Consultora senior con más de 10 años construyendo ecosistemas de datos, transformaciones CRM y soluciones de analítica para empresas de todo tipo — desde grandes multinacionales hasta pymes locales en América Latina y Europa.">
+        Senior consultant with 10+ years building data ecosystems, CRM transformations, and analytics solutions across a diverse range of businesses — from global multinationals to local SMEs across Latin America and Europe.
       </p>
       <div class="hero-ctas">
-        <a href="#projects" class="btn btn-primary">Ver Proyectos</a>
-        <a href="#contact" class="btn btn-outline">Hablemos</a>
+        <a href="#projects" class="btn btn-primary" data-en="View Projects" data-es="Ver Proyectos">View Projects</a>
+        <a href="#contact" class="btn btn-outline" data-en="Let's Talk" data-es="Hablemos">Let's Talk</a>
       </div>
     </div>
 
@@ -618,66 +702,65 @@
       <span class="ticker-item"><span>✦</span> Power Automate</span>
       <span class="ticker-item"><span>✦</span> Google Apps Script</span>
       <span class="ticker-item"><span>✦</span> Looker Studio</span>
-      <span class="ticker-item"><span>✦</span> ClickUp API</span>
+      <span class="ticker-item"><span>✦</span> ClickUp</span>
+      <span class="ticker-item"><span>✦</span> API Integrations</span>
       <span class="ticker-item"><span>✦</span> Azure</span>
       <span class="ticker-item"><span>✦</span> Databricks</span>
-      <span class="ticker-item"><span>✦</span> Veeva CRM</span>
+      <span class="ticker-item"><span>✦</span> CRM Architect</span>
       <span class="ticker-item"><span>✦</span> Data Governance</span>
-      <span class="ticker-item"><span>✦</span> Prosci OCM</span>
+      <span class="ticker-item"><span>✦</span> Scrum & PMO</span>
       <!-- duplicate for loop -->
       <span class="ticker-item"><span>✦</span> Power BI</span>
       <span class="ticker-item"><span>✦</span> SharePoint</span>
       <span class="ticker-item"><span>✦</span> Power Automate</span>
       <span class="ticker-item"><span>✦</span> Google Apps Script</span>
       <span class="ticker-item"><span>✦</span> Looker Studio</span>
-      <span class="ticker-item"><span>✦</span> ClickUp API</span>
+      <span class="ticker-item"><span>✦</span> ClickUp</span>
+      <span class="ticker-item"><span>✦</span> API Integrations</span>
       <span class="ticker-item"><span>✦</span> Azure</span>
       <span class="ticker-item"><span>✦</span> Databricks</span>
-      <span class="ticker-item"><span>✦</span> Veeva CRM</span>
+      <span class="ticker-item"><span>✦</span> CRM Architect</span>
       <span class="ticker-item"><span>✦</span> Data Governance</span>
-      <span class="ticker-item"><span>✦</span> Prosci OCM</span>
+      <span class="ticker-item"><span>✦</span> Scrum & PMO</span>
     </div>
   </div>
 
   <!-- ABOUT -->
   <section id="about">
     <div class="about-text fade-up">
-      <div class="section-label">01 — About</div>
-      <h2>Data Strategist.<br/>Builder. Nonconformist.</h2>
-      <p>
-        I'm <strong>Mayra Bastidas</strong>, founder of <strong>Synthesis Data</strong> — 
-        a data strategy consultancy. With over a decade of experience in pharma (Merck, 
-        Boehringer, Pfizer) and aviation (Air France-KLM), I've led cross-functional 
-        teams to design and deploy commercial analytics systems, CRM transformations, 
-        and data governance frameworks at scale.
+      <div class="section-label" data-en="01 — About" data-es="01 — Sobre mí">01 — About</div>
+      <h2 data-en="Data Strategist.<br/>Builder. Nonconformist." data-es="Estratega de Datos.<br/>Constructora. Inconformista.">Data Strategist.<br/>Builder. Nonconformist.</h2>
+      <p data-en="I'm Mayra, I ask the right questions, find the answers that matter, and build solutions that actually move the needle. A decade working with multinationals like Merck, Boehringer Ingelheim, Pfizer and Air France-KLM taught me that the real problem is rarely the data itself — it's the gap between data and decision."
+         data-es="Soy Mayra, hago las preguntas correctas, encuentro las respuestas que importan y construyo soluciones que realmente generan impacto. Una década trabajando con multinacionales como Merck, Boehringer Ingelheim, Pfizer y Air France-KLM me enseñó que el problema real rara vez son los datos en sí — es la brecha entre el dato y la decisión.">
+        I'm Mayra, I ask the right questions, find the answers that matter, and build solutions that actually move the needle. A decade working with multinationals like Merck, Boehringer Ingelheim, Pfizer and Air France-KLM taught me that the real problem is rarely the data itself — it's the gap between data and decision.
       </p>
-      <p>
-        Currently contracting for <strong>IBM/Pfizer Canada</strong> on the Global 
-        Commercial Analytics Hub, while pursuing an <strong>MBA at EAE Business School, Madrid</strong>. 
-        I believe data without strategy is noise. I make it signal.
+      <p data-en="That conviction led me to co-found Synthesis Data alongside my partner and a talented team — a consultancy built on one belief: data without strategy is noise. We help businesses of all sizes, from global corporations to growing SMEs, cut through that noise and turn their data into clear, agile, and confident decisions."
+         data-es="Esa convicción me llevó a cofundar Synthesis Data junto a mi socio y un equipo talentoso — una consultora construida sobre una sola creencia: los datos sin estrategia son ruido. Ayudamos a empresas de todos los tamaños, desde corporaciones globales hasta pymes en crecimiento, a atravesar ese ruido y convertir sus datos en decisiones claras, ágiles y seguras.">
+        That conviction led me to co-found Synthesis Data alongside my partner and a talented team — a consultancy built on one belief: data without strategy is noise. We help businesses of all sizes, from global corporations to growing SMEs, cut through that noise and turn their data into clear, agile, and confident decisions.
       </p>
-      <a href="mailto:mayramb@gmail.com" class="btn btn-outline" style="display:inline-block; margin-top:1rem;">
-        mayramb@gmail.com
-      </a>
+      <p data-en="Currently contracting independently for a global pharmaceutical company, supporting Data Governance strategy across international operations, while pursuing an MBA at EUDE Business School in Madrid. If you believe data without strategy is noise or want to make sure your data is working harder for your strategy, let's talk."
+         data-es="Actualmente trabajo de forma independiente para una multinacional farmacéutica global, apoyando la estrategia de Data Governance en operaciones internacionales, mientras curso un MBA en EUDE Business School en Madrid. Si crees que los datos sin estrategia son ruido o quieres asegurarte de que tus datos estén trabajando más fuerte para tu estrategia, hablemos.">
+        Currently contracting independently for a global pharmaceutical company, supporting Data Governance strategy across international operations, while pursuing an MBA at EUDE Business School in Madrid. If you believe data without strategy is noise or want to make sure your data is working harder for your strategy, let's talk.
+      </p>
     </div>
 
     <div class="fade-up">
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-num">10+</div>
-          <div class="stat-label">Years in data & digital</div>
+          <div class="stat-label" data-en="Years in data & digital" data-es="Años en datos y digital">Years in data & digital</div>
         </div>
         <div class="stat-card">
-          <div class="stat-num">3</div>
-          <div class="stat-label">Continents, one ecosystem</div>
+          <div class="stat-num">50+</div>
+          <div class="stat-label" data-en="Data & analytics projects delivered" data-es="Proyectos de analítica entregados">Data & analytics projects delivered</div>
         </div>
         <div class="stat-card">
-          <div class="stat-num">€100K</div>
-          <div class="stat-label">Cost savings at Merck</div>
+          <div class="stat-num">€100K+</div>
+          <div class="stat-label" data-en="Saved through process optimization & digital transformation" data-es="Ahorrados mediante optimización de procesos y transformación digital">Saved through process optimization & digital transformation</div>
         </div>
         <div class="stat-card">
-          <div class="stat-num">500+</div>
-          <div class="stat-label">Tasks automated (ClickUp)</div>
+          <div class="stat-num">5+</div>
+          <div class="stat-label" data-en="Countries served" data-es="Países atendidos">Countries served</div>
         </div>
       </div>
     </div>
@@ -685,8 +768,8 @@
 
   <!-- PROJECTS -->
   <section id="projects">
-    <div class="section-label fade-up">02 — Projects</div>
-    <h2 class="fade-up">Selected Work</h2>
+    <div class="section-label fade-up" data-en="02 — Projects" data-es="02 — Proyectos">02 — Projects</div>
+    <h2 class="fade-up" data-en="Selected Work" data-es="Proyectos Destacados">Selected Work</h2>
 
     <div class="projects-grid">
 
@@ -699,17 +782,15 @@
           <span class="tag yellow">Power BI</span>
           <span class="tag">REST API</span>
         </div>
-        <div class="project-title">Enterprise Checklist System — Netec/TREAYA</div>
-        <p class="project-desc">
-          Full-stack Microsoft solution for a Mexican tech training company. Transformed 
-          manual Excel-based operations into a live, automated enterprise platform 
-          integrating TrackPoint API in real time.
+        <div class="project-title" data-en="Enterprise Checklist System — Fitness Chain" data-es="Sistema de Checklists Empresarial — Cadena de Gimnasios">Enterprise Checklist System — Fitness Chain</div>
+        <p class="project-desc" data-en="Full-stack Microsoft solution for a regional fitness chain. Transformed manual Excel-based operations into a live, automated enterprise platform integrating TrackPoint API in real time." data-es="Solución Microsoft full-stack para una cadena de gimnasios regional. Transformó operaciones manuales en Excel en una plataforma empresarial automatizada integrando TrackPoint API en tiempo real.">
+          Full-stack Microsoft solution for a regional fitness chain. Transformed manual Excel-based operations into a live, automated enterprise platform integrating TrackPoint API in real time.
         </p>
         <div class="project-results">
-          <div class="result-item">34 checklists + 7 SharePoint forms deployed</div>
-          <div class="result-item">5 Power Automate flows for end-to-end automation</div>
-          <div class="result-item">Real-time TrackPoint API integration (Phase 2 accelerated)</div>
-          <div class="result-item">98 hours → 48% scope growth managed & billed</div>
+          <div class="result-item" data-en="34 checklists + 7 SharePoint forms deployed" data-es="34 checklists + 7 formularios SharePoint desplegados">34 checklists + 7 SharePoint forms deployed</div>
+          <div class="result-item" data-en="5 Power Automate flows for end-to-end automation" data-es="5 flujos Power Automate para automatización extremo a extremo">5 Power Automate flows for end-to-end automation</div>
+          <div class="result-item" data-en="Real-time TrackPoint API integration (Phase 2 accelerated)" data-es="Integración TrackPoint API en tiempo real (Fase 2 acelerada)">Real-time TrackPoint API integration (Phase 2 accelerated)</div>
+          <div class="result-item" data-en="98 hours → 48% scope growth managed & billed" data-es="98 horas → 48% crecimiento de alcance gestionado y facturado">98 hours → 48% scope growth managed & billed</div>
         </div>
       </div>
 
@@ -721,17 +802,15 @@
           <span class="tag">ClickUp API</span>
           <span class="tag orange">Looker Studio</span>
         </div>
-        <div class="project-title">ClickUp Executive Dashboard</div>
-        <p class="project-desc">
-          Built a full data pipeline from ClickUp to Google Sheets to Looker Studio. 
-          Automated extraction of 500+ tasks across all spaces, with batch-optimized 
-          writes and calculated KPIs for executive reporting.
+        <div class="project-title" data-en="ClickUp Executive Dashboard" data-es="Dashboard Ejecutivo ClickUp">ClickUp Executive Dashboard</div>
+        <p class="project-desc" data-en="Built a full data pipeline from ClickUp to Google Sheets to Looker Studio. Automated extraction of 500+ tasks across all spaces, with batch-optimized writes and calculated KPIs for executive reporting." data-es="Pipeline completo de datos de ClickUp a Google Sheets a Looker Studio. Extracción automatizada de 500+ tareas con escrituras optimizadas por lotes y KPIs calculados para reportes ejecutivos.">
+          Built a full data pipeline from ClickUp to Google Sheets to Looker Studio. Automated extraction of 500+ tasks across all spaces, with batch-optimized writes and calculated KPIs for executive reporting.
         </p>
         <div class="project-results">
-          <div class="result-item">500+ tasks extracted across 11 ClickUp spaces</div>
-          <div class="result-item">Batch optimization solved 6-min timeout limit</div>
-          <div class="result-item">KPIs: closure time, due date compliance, delay analysis</div>
-          <div class="result-item">Live Looker Studio dashboard with drill-down filters</div>
+          <div class="result-item" data-en="500+ tasks extracted across 11 ClickUp spaces" data-es="500+ tareas extraídas de 11 espacios ClickUp">500+ tasks extracted across 11 ClickUp spaces</div>
+          <div class="result-item" data-en="Batch optimization solved 6-min timeout limit" data-es="Optimización por lotes resolvió límite de timeout de 6 min">Batch optimization solved 6-min timeout limit</div>
+          <div class="result-item" data-en="KPIs: closure time, due date compliance, delay analysis" data-es="KPIs: tiempo de cierre, cumplimiento de fechas, análisis de retrasos">KPIs: closure time, due date compliance, delay analysis</div>
+          <div class="result-item" data-en="Live Looker Studio dashboard with drill-down filters" data-es="Dashboard Looker Studio en vivo con filtros drill-down">Live Looker Studio dashboard with drill-down filters</div>
         </div>
       </div>
 
@@ -743,17 +822,15 @@
           <span class="tag orange">Power Automate</span>
           <span class="tag">MS Forms</span>
         </div>
-        <div class="project-title">Contact Center Case Management System</div>
-        <p class="project-desc">
-          Architecture design for a digital case management platform replacing 
-          Excel + manual Teams notifications. Full traceability from intake to resolution 
-          across legal and scientific expert areas.
+        <div class="project-title" data-en="Contact Center Case Management System" data-es="Sistema de Gestión de Casos Contact Center">Contact Center Case Management System</div>
+        <p class="project-desc" data-en="Architecture design for a digital case management platform replacing Excel + manual Teams notifications. Full traceability from intake to resolution across legal and scientific expert areas." data-es="Diseño de arquitectura para plataforma digital de gestión de casos reemplazando Excel + notificaciones manuales en Teams. Trazabilidad completa desde la recepción hasta la resolución en áreas legales y científicas.">
+          Architecture design for a digital case management platform replacing Excel + manual Teams notifications. Full traceability from intake to resolution across legal and scientific expert areas.
         </p>
         <div class="project-results">
-          <div class="result-item">Master list + expert-area sublists architecture</div>
-          <div class="result-item">Intelligent routing flows per case type</div>
-          <div class="result-item">Full audit trail replacing zero-traceability system</div>
-          <div class="result-item">Single source of truth across departments</div>
+          <div class="result-item" data-en="Master list + expert-area sublists architecture" data-es="Arquitectura de lista maestra + sublistas por área experta">Master list + expert-area sublists architecture</div>
+          <div class="result-item" data-en="Intelligent routing flows per case type" data-es="Flujos de enrutamiento inteligente por tipo de caso">Intelligent routing flows per case type</div>
+          <div class="result-item" data-en="Full audit trail replacing zero-traceability system" data-es="Auditoría completa reemplazando sistema sin trazabilidad">Full audit trail replacing zero-traceability system</div>
+          <div class="result-item" data-en="Single source of truth across departments" data-es="Fuente única de verdad entre departamentos">Single source of truth across departments</div>
         </div>
       </div>
 
@@ -765,15 +842,14 @@
           <span class="tag orange">MS Forms</span>
           <span class="tag">PMO</span>
         </div>
-        <div class="project-title">Auto-Generated Client Onboarding Forms</div>
-        <p class="project-desc">
-          Consulting tool that programmatically generates a full Google Forms questionnaire 
-          for SME client discovery — eliminating manual setup for each new engagement.
+        <div class="project-title" data-en="Auto-Generated Client Onboarding Forms" data-es="Formularios de Onboarding Auto-Generados">Auto-Generated Client Onboarding Forms</div>
+        <p class="project-desc" data-en="Consulting tool that programmatically generates a full Google Forms questionnaire for SME client discovery — eliminating manual setup for each new engagement." data-es="Herramienta de consultoría que genera programáticamente un cuestionario completo en Google Forms para descubrimiento de clientes pyme — eliminando la configuración manual en cada nuevo proyecto.">
+          Consulting tool that programmatically generates a full Google Forms questionnaire for SME client discovery — eliminating manual setup for each new engagement.
         </p>
         <div class="project-results">
-          <div class="result-item">13-question discovery form auto-generated via script</div>
-          <div class="result-item">WhatsApp template included for client distribution</div>
-          <div class="result-item">Reusable across all consulting engagements</div>
+          <div class="result-item" data-en="13-question discovery form auto-generated via script" data-es="Formulario de 13 preguntas auto-generado por script">13-question discovery form auto-generated via script</div>
+          <div class="result-item" data-en="WhatsApp template included for client distribution" data-es="Plantilla de WhatsApp incluida para distribución a clientes">WhatsApp template included for client distribution</div>
+          <div class="result-item" data-en="Reusable across all consulting engagements" data-es="Reutilizable en todos los proyectos de consultoría">Reusable across all consulting engagements</div>
         </div>
       </div>
 
@@ -783,20 +859,18 @@
         <div class="project-tags">
           <span class="tag">Azure</span>
           <span class="tag orange">Power BI</span>
-          <span class="tag yellow">Veeva CRM</span>
-          <span class="tag">Merck Group</span>
+          <span class="tag yellow">CRM</span>
+          <span class="tag">Global Pharma</span>
         </div>
-        <div class="project-title">In-House Digital Agency — Merck Group</div>
-        <p class="project-desc">
-          Led the creation of an internal digital agency at Merck, eliminating external 
-          vendor dependency. Integrated commercial data into Azure, built real-time Power BI 
-          dashboards for C-suite, and deployed CRM automation across multiple markets.
+        <div class="project-title" data-en="In-House Digital Agency — Global Pharma Multinational" data-es="Agencia Digital Interna — Multinacional Farmacéutica Global">In-House Digital Agency — Global Pharma Multinational</div>
+        <p class="project-desc" data-en="Led the creation of an internal digital agency at a global pharma multinational, eliminating external vendor dependency. Integrated commercial data into Azure, built real-time Power BI dashboards for C-suite, and deployed CRM automation across multiple markets." data-es="Lideré la creación de una agencia digital interna en una multinacional farmacéutica global, eliminando dependencia de proveedores externos. Integré datos comerciales en Azure, construí dashboards Power BI en tiempo real para C-suite y desplegué automatización CRM en múltiples mercados.">
+          Led the creation of an internal digital agency at a global pharma multinational, eliminating external vendor dependency. Integrated commercial data into Azure, built real-time Power BI dashboards for C-suite, and deployed CRM automation across multiple markets.
         </p>
         <div class="project-results">
-          <div class="result-item">€100K+ saved annually by eliminating vendors</div>
-          <div class="result-item">30% reduction in content execution time</div>
-          <div class="result-item">Managed 13-person cross-functional team</div>
-          <div class="result-item">Omnichannel CRM automation across multiple markets</div>
+          <div class="result-item" data-en="€100K+ saved annually by eliminating vendors" data-es="€100K+ ahorrados anualmente al eliminar proveedores">€100K+ saved annually by eliminating vendors</div>
+          <div class="result-item" data-en="30% reduction in content execution time" data-es="30% de reducción en tiempo de ejecución de contenidos">30% reduction in content execution time</div>
+          <div class="result-item" data-en="Managed 13-person cross-functional team" data-es="Gestión de equipo multifuncional de 13 personas">Managed 13-person cross-functional team</div>
+          <div class="result-item" data-en="Omnichannel CRM automation across multiple markets" data-es="Automatización CRM omnicanal en múltiples mercados">Omnichannel CRM automation across multiple markets</div>
         </div>
       </div>
 
@@ -806,18 +880,16 @@
         <div class="project-tags">
           <span class="tag">Data Governance</span>
           <span class="tag orange">MDM</span>
-          <span class="tag yellow">IBM / Pfizer</span>
+          <span class="tag yellow">Global Pharma</span>
         </div>
-        <div class="project-title">Global Commercial Analytics Hub — Pfizer Canada</div>
-        <p class="project-desc">
-          Contracting via IBM to support Pfizer Canada's Global Commercial Analytics Hub 
-          deployment — standardizing SOPs, forecasting models, and governance frameworks 
-          for worldwide scalability across 8+ commercial data sources.
+        <div class="project-title" data-en="Global Commercial Analytics Hub — Global Pharma Operations" data-es="Hub Global de Analítica Comercial — Operaciones Farmacéuticas Globales">Global Commercial Analytics Hub — Global Pharma Operations</div>
+        <p class="project-desc" data-en="Independent contract supporting a global pharmaceutical company's Commercial Analytics Hub deployment — standardizing SOPs, forecasting models, and governance frameworks for worldwide scalability across 8+ commercial data sources." data-es="Contrato independiente apoyando el despliegue del Hub de Analítica Comercial de una compañía farmacéutica global — estandarizando SOPs, modelos de forecast y marcos de gobernanza para escalabilidad mundial en 8+ fuentes de datos comerciales.">
+          Independent contract supporting a global pharmaceutical company's Commercial Analytics Hub deployment — standardizing SOPs, forecasting models, and governance frameworks for worldwide scalability across 8+ commercial data sources.
         </p>
         <div class="project-results">
-          <div class="result-item">SOP library for global commercial analytics processes</div>
-          <div class="result-item">Data governance framework across 8+ global sources</div>
-          <div class="result-item">Forecasting model standardization for scale</div>
+          <div class="result-item" data-en="SOP library for global commercial analytics processes" data-es="Biblioteca de SOPs para procesos de analítica comercial global">SOP library for global commercial analytics processes</div>
+          <div class="result-item" data-en="Data governance framework across 8+ global sources" data-es="Marco de gobernanza de datos en 8+ fuentes globales">Data governance framework across 8+ global sources</div>
+          <div class="result-item" data-en="Forecasting model standardization for scale" data-es="Estandarización de modelos de forecast para escala global">Forecasting model standardization for scale</div>
         </div>
       </div>
 
@@ -826,8 +898,8 @@
 
   <!-- STACK -->
   <section id="stack">
-    <div class="section-label fade-up">03 — Stack</div>
-    <h2 class="fade-up">Tools & Technologies</h2>
+    <div class="section-label fade-up" data-en="03 — Stack" data-es="03 — Stack">03 — Stack</div>
+    <h2 class="fade-up" data-en="Tools & Technologies" data-es="Herramientas y Tecnologías">Tools & Technologies</h2>
 
     <div class="stack-categories fade-up">
       <div class="stack-cat">
@@ -850,25 +922,25 @@
         </div>
       </div>
       <div class="stack-cat">
-        <div class="stack-cat-title">CRM & Commercial</div>
+        <div class="stack-cat-title" data-en="CRM & Commercial" data-es="CRM y Comercial">CRM & Commercial</div>
         <div class="stack-items">
           <div class="stack-item">Veeva CRM / Align / Open Data</div>
           <div class="stack-item">Salesforce</div>
-          <div class="stack-item">ClickUp (API)</div>
+          <div class="stack-item">ClickUp</div>
           <div class="stack-item">HubSpot</div>
         </div>
       </div>
       <div class="stack-cat">
-        <div class="stack-cat-title">Methodology</div>
+        <div class="stack-cat-title" data-en="Methodology" data-es="Metodología">Methodology</div>
         <div class="stack-items">
           <div class="stack-item">Prosci Change Management</div>
-          <div class="stack-item">Agile PM</div>
+          <div class="stack-item">Agile PM / Scrum</div>
           <div class="stack-item">Data Governance Frameworks</div>
           <div class="stack-item">SOP Design & Documentation</div>
         </div>
       </div>
       <div class="stack-cat">
-        <div class="stack-cat-title">APIs & Automation</div>
+        <div class="stack-cat-title" data-en="APIs & Automation" data-es="APIs y Automatización">APIs & Automation</div>
         <div class="stack-items">
           <div class="stack-item">REST API Integration</div>
           <div class="stack-item">TrackPoint API</div>
@@ -877,12 +949,12 @@
         </div>
       </div>
       <div class="stack-cat">
-        <div class="stack-cat-title">Industries</div>
+        <div class="stack-cat-title" data-en="Industries" data-es="Industrias">Industries</div>
         <div class="stack-items">
-          <div class="stack-item">Pharma (Pfizer, Merck, BI)</div>
-          <div class="stack-item">Aviation (Air France-KLM)</div>
-          <div class="stack-item">SME Consulting</div>
-          <div class="stack-item">EdTech</div>
+          <div class="stack-item" data-en="Pharma (global multinationals)" data-es="Farmacéutica (multinacionales globales)">Pharma (global multinationals)</div>
+          <div class="stack-item" data-en="Aviation (Air France-KLM)" data-es="Aviación (Air France-KLM)">Aviation (Air France-KLM)</div>
+          <div class="stack-item" data-en="SME Consulting" data-es="Consultoría para Pymes">SME Consulting</div>
+          <div class="stack-item">EdTech / Fitness</div>
         </div>
       </div>
     </div>
@@ -890,45 +962,88 @@
 
   <!-- CONTACT -->
   <section id="contact">
-    <div class="section-label fade-up" style="justify-content:center;">04 — Contact</div>
-    <h2 class="fade-up">Let's Build Something</h2>
-    <p class="fade-up">
-      Available for consulting engagements, freelance projects, and full-time 
-      senior roles in data strategy, commercial analytics, and digital transformation.
-      Based in Madrid 🇪🇸
+    <div class="section-label fade-up" style="justify-content:center;" data-en="04 — Contact" data-es="04 — Contacto">04 — Contact</div>
+    <h2 class="fade-up" data-en="Let's Build Something" data-es="Construyamos Algo">Let's Build Something</h2>
+    <p class="fade-up" data-en="Available for consulting engagements, freelance projects, and full-time senior roles in data strategy, commercial analytics, and digital transformation. Based between Madrid 🇪🇸 and Bogotá 🇨🇴" data-es="Disponible para proyectos de consultoría, freelance y roles senior de tiempo completo en estrategia de datos, analítica comercial y transformación digital. Entre Madrid 🇪🇸 y Bogotá 🇨🇴">
+      Available for consulting engagements, freelance projects, and full-time senior roles in data strategy, commercial analytics, and digital transformation. Based between Madrid 🇪🇸 and Bogotá 🇨🇴
     </p>
     <div class="contact-links fade-up">
-      <a href="mailto:mayramb@gmail.com" class="btn btn-primary">Send Email</a>
-      <a href="https://linkedin.com/in/mayramercedesbastidasbernal" target="_blank" class="btn btn-outline">LinkedIn</a>
+
+      <!-- Email dropdown -->
+      <div class="email-wrapper">
+        <button class="btn btn-primary" data-en="Send Email" data-es="Enviar Email">Send Email ▾</button>
+        <div class="email-dropdown">
+          <a href="mailto:may.multiverse@gmail.com" class="email-option">
+            <span class="email-label" data-en="Personal / Brand" data-es="Personal / Marca">Personal / Brand</span>
+            may.multiverse@gmail.com
+          </a>
+          <a href="mailto:mayra.bastidas@synthesis-data.com" class="email-option">
+            <span class="email-label" data-en="Synthesis Data" data-es="Synthesis Data">Synthesis Data</span>
+            mayra.bastidas@synthesis-data.com
+          </a>
+        </div>
+      </div>
+
+      <a href="#" id="linkedin-link" target="_blank" class="btn btn-outline">LinkedIn</a>
       <a href="https://synthesis-data.com" target="_blank" class="btn btn-outline">Synthesis Data</a>
-      <a href="https://github.com/mayramb" target="_blank" class="btn btn-outline">GitHub</a>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <p>© 2026 Mayra Bastidas — Maymultiverse</p>
-    <p>Madrid, España · synthesis-data.com</p>
+    <p>Madrid 🇪🇸 · Bogotá 🇨🇴 · synthesis-data.com</p>
   </footer>
 
-  <!-- SCROLL ANIMATIONS -->
+  <!-- SCRIPTS -->
   <script>
+    // ── SCROLL ANIMATIONS ──
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(el => {
-        if (el.isIntersecting) {
-          el.target.classList.add('visible');
-        }
+        if (el.isIntersecting) el.target.classList.add('visible');
       });
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-    // Stagger children
     document.querySelectorAll('.projects-grid, .stats-grid, .stack-categories').forEach(parent => {
       Array.from(parent.children).forEach((child, i) => {
         child.style.transitionDelay = `${i * 0.1}s`;
       });
     });
+
+    // ── LANGUAGE TOGGLE ──
+    const LINKEDIN_EN = 'https://www.linkedin.com/in/mayramercedesbastidasbernal/?locale=en_US';
+    const LINKEDIN_ES = 'https://www.linkedin.com/in/mayramercedesbastidasbernal/';
+
+    function setLang(lang) {
+      document.documentElement.setAttribute('data-lang', lang);
+
+      // Update all elements with data-en / data-es
+      document.querySelectorAll('[data-en]').forEach(el => {
+        const text = el.getAttribute(`data-${lang}`);
+        if (text) {
+          if (el.tagName === 'H2' || el.tagName === 'H1') {
+            el.innerHTML = text;
+          } else {
+            el.textContent = text;
+          }
+        }
+      });
+
+      // LinkedIn URL
+      document.getElementById('linkedin-link').href = lang === 'es' ? LINKEDIN_ES : LINKEDIN_EN;
+
+      // Toggle buttons
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+
+      // Page lang attribute
+      document.documentElement.lang = lang;
+    }
+
+    // Init LinkedIn on load
+    document.getElementById('linkedin-link').href = LINKEDIN_EN;
   </script>
 
 </body>
